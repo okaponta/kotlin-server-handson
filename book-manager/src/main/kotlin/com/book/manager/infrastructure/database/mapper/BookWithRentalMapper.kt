@@ -64,3 +64,13 @@ fun BookWithRentalMapper.select(completer: SelectCompleter) =
         }
         completer()
     }.run(this::selectMany)
+
+fun BookWithRentalMapper.selectByPrimaryKey(id_: Long): BookWithRental? =
+    org.mybatis.dynamic.sql.util.kotlin.mybatis3.select(columnList) {
+        from(book)
+        leftJoin(rental) {
+            on(rental.bookId) equalTo book.id
+        }
+        where { id isEqualTo id_ }
+    }.run(this::selectOne)
+
