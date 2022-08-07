@@ -2,7 +2,6 @@ package com.book.manager.security
 
 import com.book.manager.domain.enum.RoleType
 import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
@@ -17,7 +16,6 @@ import javax.sql.DataSource
 
 
 @EnableWebSecurity
-@Configuration
 class SecurityConfig {
 
     @Bean
@@ -27,20 +25,17 @@ class SecurityConfig {
 
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain? {
-        http.formLogin { login ->
-            login
-                .loginProcessingUrl("/login") // ログイン処理のパス
+        http.formLogin {
+            it.loginProcessingUrl("/login") // ログイン処理のパス
                 .usernameParameter("email")
                 .passwordParameter("pass")
                 .successHandler(BookManagerAuthenticationSuccessHandler())
                 .failureHandler(BookManagerAuthenticationFailureHandler())
-        }.exceptionHandling { exception ->
-            exception
-                .authenticationEntryPoint(BookManagerAuthenticationEntryPoint())
+        }.exceptionHandling {
+            it.authenticationEntryPoint(BookManagerAuthenticationEntryPoint())
                 .accessDeniedHandler(BookManagerAccessDeniedHandler())
-        }.authorizeRequests { authz ->
-            authz
-                .mvcMatchers("/login").permitAll() // 直リンクOK
+        }.authorizeRequests {
+            it.mvcMatchers("/login").permitAll() // 直リンクOK
                 .mvcMatchers("/admin/**").hasAuthority(RoleType.ADMIN.toString()) // 権限制御
                 .anyRequest().authenticated()
         }.cors {
