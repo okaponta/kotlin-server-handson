@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("admin/book")
-@CrossOrigin(origins = ["http://localhost:8081"], allowCredentials = "true")
 class AdminBookController(
     private val adminBookService: AdminBookService
 ) {

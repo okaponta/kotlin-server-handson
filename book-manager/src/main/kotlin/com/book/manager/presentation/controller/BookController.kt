@@ -4,11 +4,13 @@ import com.book.manager.presentation.response.BookInfo
 import com.book.manager.presentation.response.GetBookDetailResponse
 import com.book.manager.presentation.response.GetBookListResponse
 import com.book.manager.service.BookService
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/book")
-@CrossOrigin(origins = ["http://localhost:8081"], allowCredentials = "true")
 class BookController(
     private val bookService: BookService
 ) {
