@@ -1,10 +1,8 @@
 package com.example
 
+import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
-import com.example.plugins.*
-import io.ktor.http.*
-import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
@@ -14,14 +12,14 @@ fun main() {
             get("/") {
                 call.respondText("Hello Ktor!")
             }
+            get("/hello/{name}") {
+                val name = call.parameters["name"]
+                call.respondText("Hello $name!")
+            }
+            get("/hello") {
+                val name = call.request.queryParameters["name"]
+                call.respondText("Hello $name!")
+            }
         }
     }.start(wait = true)
-}
-
-fun Application.module(testing: Boolean = false) {
-    routing {
-        get("/") {
-            call.respondText("Hello Ktor!")
-        }
-    }
 }
