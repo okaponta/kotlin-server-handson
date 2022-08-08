@@ -6,6 +6,7 @@ import io.ktor.server.engine.*
 import io.ktor.server.locations.*
 import io.ktor.server.netty.*
 import io.ktor.server.plugins.contentnegotiation.*
+import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
@@ -70,6 +71,11 @@ fun Routing.bookRoute() {
             val response = BookResponse(request.bookId, "Kotlin入門", "Kotlin太郎")
             call.respond(response)
         }
+
+        post("/register") {
+            val request = call.receive<RegisterRequest>()
+            call.respondText("registered id =${request.id}")
+        }
     }
 }
 
@@ -77,4 +83,8 @@ data class BookResponse(
     val id: Long,
     val title: String,
     val author: String
+)
+
+data class RegisterRequest(
+    val id: Long
 )
