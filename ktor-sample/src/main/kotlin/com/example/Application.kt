@@ -9,9 +9,7 @@ import io.ktor.server.routing.*
 fun main() {
     embeddedServer(Netty, port = 8080, host = "0.0.0.0") {
         routing {
-            get("/") {
-                call.respondText("Hello Ktor!")
-            }
+            greetingRoute()
             get("/hello/{name}") {
                 val name = call.parameters["name"]
                 call.respondText("Hello $name!")
@@ -22,4 +20,10 @@ fun main() {
             }
         }
     }.start(wait = true)
+}
+
+fun Routing.greetingRoute() {
+    get("/") {
+        call.respondText("Hello Ktor!")
+    }
 }
