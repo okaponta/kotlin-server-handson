@@ -23,7 +23,12 @@ fun main() {
 }
 
 fun Routing.greetingRoute() {
-    get("/") {
-        call.respondText("Hello Ktor!")
+    route("greeting") {
+        get("/hello") {
+            call.respondText("Hello!")
+        }
+        get("/goodmorning") {
+            call.respondText("Good morning!")
+        }
     }
 }
