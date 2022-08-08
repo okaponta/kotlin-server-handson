@@ -2,6 +2,7 @@ package com.example
 
 import io.ktor.serialization.jackson.*
 import io.ktor.server.application.*
+import io.ktor.server.auth.*
 import io.ktor.server.engine.*
 import io.ktor.server.locations.*
 import io.ktor.server.netty.*
@@ -16,6 +17,17 @@ fun main() {
         install(ContentNegotiation) {
             jackson()
         }
+        install(Authentication) {
+            basic {
+                validate { credentials ->
+                    if (credentials.name == "user" && credentials.password == "password") {
+                        UserIdPrincipal(credentials.name)
+                    } else {
+                        null
+                    }
+                }
+            }
+        }
         routing {
             greetingRoute()
             userRoute()
@@ -27,6 +39,12 @@ fun main() {
             get("/hello") {
                 val name = call.request.queryParameters["name"]
                 call.respondText("Hello $name!")
+            }
+            authenticate {
+                get("/authenticated") {
+                    val user = call.authentication.principal<UserIdPrincipal>()
+                    call.respondText("authenticated id=${user?.name}")
+                }
             }
         }
     }.start(wait = true)
@@ -88,3 +106,4 @@ data class BookResponse(
 data class RegisterRequest(
     val id: Long
 )
+
